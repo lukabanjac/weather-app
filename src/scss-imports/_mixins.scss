@@ -1,0 +1,36 @@
+//media queries
+@mixin mq($type, $rezMin, $rezMax: null) {
+
+   @if ($type=='from') {
+     @media only screen and (min-width: #{$rezMin}px) {
+       @content;
+     }
+   }
+ 
+   // ========= TO =========
+   @else if ($type=='to') {
+     @media only screen and (max-width: #{$rezMin - 1}px) {
+       @content;
+     }
+   }
+ 
+   // ========= FROM TO =========
+   @else if ($type=='fromto') {
+     @media only screen and (min-width: #{$rezMin}px) and (max-width: #{$rezMax - 1}px) {
+       @content;
+     }
+   }
+ }
+ 
+ @mixin flexGrid($gap, $columns, $offset: 0) {
+   flex: 0 0 calc(#{100% / $columns} - #{$gap * ($columns - 1) / $columns});
+   max-width: calc(#{100% / $columns} - #{$gap * ($columns - 1) / $columns});
+   margin-bottom: $gap;
+   margin-right: $gap;
+   width: 100%;
+ 
+   &:nth-child(#{$columns + $offset}n) {
+     margin-right: 0;
+   }
+ }
+ 
