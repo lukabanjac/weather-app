@@ -1,14 +1,52 @@
 @import '../../scss-imports/variables';
 
-.InputField {
-   background-color: $inputBackground;
+.inputField {
+   background-color: $lighterGray;
    border-radius: 10px;
    box-shadow: 0px 0px 10px 5px $inputShadow; 
    padding: 10px;
    display: flex;
-   min-height: 30px;
+   max-height: 45px;
 }
 
-.SunAndCloud {
-   height: 30px;
+.sunAndCloud {
+   height: 40px;
+}
+
+.flagInput {
+   margin-left: 10px;
+   max-height: 35px;
+
+   font-weight: bold;
+   color: $darkGray;
+
+   > button {
+      font-weight: bold;
+      border-color: $midGray;
+      border-radius: 5px;
+      background-color: $white;
+      padding: 5px 10px 5px 5px;
+   }
+
+   ul > div > input {
+      border-radius: 5px;
+      border-color: $lightGray;
+      padding: 4px;
+   }
+}
+
+.cityInput {
+   max-height: 10px;
+   min-height: 32px;
+
+   border-color: $midGray;
+   border-radius: 5px;
+   border-style: solid;
+   border-width: 1px;
+
+   background-color: $white;
+
+   outline: none;
+   margin-left: 10px;
+   padding: 3px;
 }
