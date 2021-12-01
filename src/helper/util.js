@@ -1,5 +1,3 @@
-import { logDOM } from "@testing-library/dom";
-
 export default class Util {
     /**
      * Formats and filters out API return data
@@ -11,7 +9,7 @@ export default class Util {
      */
     formatWeather = (timestampsArr) => {
         const dailyMap = new Map();
-        timestampsArr.map(ts => {
+        timestampsArr.forEach(ts => {
             const date = ts.dt_txt.split(" ")[0];
             dailyMap.set(date, dailyMap.has(date) ? dailyMap.get(date).concat(ts.main.temp) : [ts.main.temp])
         })
