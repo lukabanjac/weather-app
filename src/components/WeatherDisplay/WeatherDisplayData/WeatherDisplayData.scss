@@ -1,0 +1,23 @@
+@import '../../../scss-imports/variables';
+
+.temperatureWrapper {
+    display: inline-flex;
+    position: relative;
+}
+
+.temperatureNumberBig {
+    font-size: 100px;
+}
+
+.temperatureUpperText {
+    font-size: 15px;
+    color: $navyBlue;
+}
+
+.celsiusSignBig {
+    padding-top: 28px;
+}
+
+.celsiusSignSmall {
+    font-size: 15px;
+}

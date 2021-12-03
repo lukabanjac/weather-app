@@ -1,0 +1,5 @@
+export const GET_TEMPERATURES = "GET_TEMPERATURES";
+
+export const ERRORS = {
+    NO_CITY_FOUND: "NO_CITY_FOUND"
+}

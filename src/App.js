@@ -1,17 +1,16 @@
 import './App.scss';
 import InputField from './components/InputField/InputField';
-import React, { useEffect } from 'react';
+import WeatherDisplay from './components/WeatherDisplay/WeatherDisplay';
+import State from './state-mgmt/state';
 
 function App() {
 
-  useEffect(() => {
-  });
-
   return (
     <div className="App">
-      <div>
+      <State>
         <InputField />
-      </div>
+        <WeatherDisplay />
+      </State>
     </div>
   );
 }
