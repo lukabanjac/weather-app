@@ -37,7 +37,7 @@ const InputField = () => {
           >  
           </input>
           <button className="citySearchButton" onClick={() => context.getTemperatures(`${city},${code}`)}>
-            <img src={SearchIcon} alt="search"></img>
+            { context.loading ? "Loading..." :  <img src={SearchIcon} alt="search"></img> }
           </button>  
         </div>
       </div>

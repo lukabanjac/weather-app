@@ -3,31 +3,42 @@ import Api from '../helper/api';
 import Util from '../helper/util';
 import Context from './context'
 import Reducer from './reducer'
-import { ERRORS, GET_TEMPERATURES } from './types'
+import { ERRORS, SET_TEMPERATURES_BY_DAY, LOADED, SET_WEEKLY_AVERAGE, SET_TEMPERATURES_BY_HOUR } from './types'
 
 
 
 const State = (props) => {
-  const api = new Api();
-  const util = new Util();
-
+    const api = new Api();
+    const util = new Util();
+    
     let initialState = {
-        temperatures: null,
+        weeklyAverage: NaN,
+        loaded: false,
+        temperaturesByDay: null,
+        temperaturesByHour: null,
         noCityFoundError: false
     }
 
     const [state, dispatch] = useReducer(Reducer, initialState)
 
     const getTemperatures = async (city) => {
-        console.log("FROM STATE:", city);
         try {
             let res =  await api.getCityWeather(city);
 
+            //turn off noCityFoundError when user inputs a correct city 
             state.noCityFoundError && dispatch({ type: ERRORS.NO_CITY_FOUND, payload: !state.noCityFoundError });
             
-            let data = util.formatWeather(res.data.list);
+            let dataByDay = util.formatWeather(res.data.list); //get all temepratures for its day as map
+            let dataByHour = res.data.list.map(t => [t.dt_txt, t.main.temp]);
 
-            dispatch({ type: GET_TEMPERATURES, payload: data })
+            let allTemperatures = [];
+            dataByDay.forEach((v) => allTemperatures.push(...v));
+            const weeklyAverage = util.calcArrayAvg(allTemperatures);
+
+            dispatch({ type: SET_TEMPERATURES_BY_DAY, payload: dataByDay })
+            dispatch({ type: SET_TEMPERATURES_BY_HOUR, payload: dataByHour })
+            dispatch({ type: SET_WEEKLY_AVERAGE, payload: weeklyAverage})
+            dispatch({ type: LOADED, payload: true })
         } catch (error) {
             toggleError(ERRORS.NO_CITY_FOUND)
             console.error(error);
@@ -41,14 +52,16 @@ const State = (props) => {
                 break;
             default:
                 break;
-        }
-             
+        }  
     }
 
     return (
         <Context.Provider
             value={{
-                temperatures: state.temperatures,
+                weeklyAverage: state.weeklyAverage,
+                loaded: state.loaded,
+                temperaturesByDay: state.temperaturesByDay,
+                temperaturesByHour: state.temperaturesByHour,
                 noCityFoundError: state.noCityFoundError,
                 toggleError,
                 getTemperatures
