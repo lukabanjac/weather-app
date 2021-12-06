@@ -22,11 +22,12 @@ const State = (props) => {
     const [state, dispatch] = useReducer(Reducer, initialState)
 
     const getTemperatures = async (city) => {
+        dispatch({ type: LOADED, payload: false })
         try {
             let res =  await api.getCityWeather(city);
 
             //turn off noCityFoundError when user inputs a correct city 
-            state.noCityFoundError && dispatch({ type: ERRORS.NO_CITY_FOUND, payload: !state.noCityFoundError });
+            state.noCityFoundError && dispatch({ type: ERRORS.NO_CITY_FOUND, payload: false });
             
             let dataByDay = util.formatWeather(res.data.list); //get all temepratures for its day as map
             let dataByHour = res.data.list.map(t => [t.dt_txt, t.main.temp]);
@@ -40,19 +41,11 @@ const State = (props) => {
             dispatch({ type: SET_WEEKLY_AVERAGE, payload: weeklyAverage})
             dispatch({ type: LOADED, payload: true })
         } catch (error) {
-            toggleError(ERRORS.NO_CITY_FOUND)
+            dispatch({ type: ERRORS.NO_CITY_FOUND, payload: true });
+            dispatch({ type: LOADED, payload: true })
+
             console.error(error);
         }
-    }
-
-    const toggleError = (type) => {
-        switch (type){
-            case ERRORS.NO_CITY_FOUND:
-                dispatch({ type: ERRORS.NO_CITY_FOUND, payload: !state.noCityFoundError });
-                break;
-            default:
-                break;
-        }  
     }
 
     return (
@@ -63,7 +56,6 @@ const State = (props) => {
                 temperaturesByDay: state.temperaturesByDay,
                 temperaturesByHour: state.temperaturesByHour,
                 noCityFoundError: state.noCityFoundError,
-                toggleError,
                 getTemperatures
             }}
         >

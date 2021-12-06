@@ -10,6 +10,10 @@
   font-size: calc(10px + 2vmin);
   color: white;
 
+  input:focus, textarea:focus, select:focus{
+    outline: none;
+  }
+
 }
 
 

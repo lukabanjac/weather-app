@@ -43,7 +43,6 @@ export default class Util {
                         .attr("transform",
                             "translate(" + margin.left + "," + margin.top + ")");
 
-        // Add X axis --> it is a date format
         let x = d3.scaleTime()
                 .domain(d3.extent(dataToDisplay, function(d) { return d.date; }))
                 .range([ 0, width ]);
@@ -51,14 +50,14 @@ export default class Util {
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x));
 
-        // Add Y axis
+        const minY = d3.min(dataToDisplay.map(t => t.value));
+        const maxY = d3.max(dataToDisplay.map(t => t.value));
         let y = d3.scaleLinear()
-            .domain([0, d3.max(dataToDisplay, function(d) { return +d.value; })])
+            .domain([ minY < -10 ? minY : -10, maxY > 20 ? maxY : 20])
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
 
-        // Add the line
         svg.append("path")
             .datum(dataToDisplay)
             .attr("fill", "none")

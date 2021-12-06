@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
+import ReactModal from 'react-modal';
 import Util from '../../helper/util';
 import Context from '../../state-mgmt/context';
 import './WeatherDisplay.scss'
@@ -8,6 +9,7 @@ function WeatherDisplay() {
     const util = new Util();
 
     const context = useContext(Context);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const weekday = [ "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
@@ -16,13 +18,7 @@ function WeatherDisplay() {
         const dataEntries = [];
 
         const weatherGraphContainer = document.getElementById('weatherGraph');
-        if(weatherGraphContainer){weatherGraphContainer.innerHTML = ""}
-
-        var dataToDisplay = context.temperaturesByHour.map(t => {
-            return { date: new Date(t[0]), value: t[1]}
-        });
-
-        util.renderWeatherGraph(dataToDisplay);
+        if ( weatherGraphContainer ) { weatherGraphContainer.innerHTML = "" }
 
         let i = 0;
         context.temperaturesByDay?.forEach((v, k) => {
@@ -38,7 +34,6 @@ function WeatherDisplay() {
                 )
             )
         })
-        console.log(allTemperatures)
         return dataEntries;
     }
 
@@ -68,6 +63,22 @@ function WeatherDisplay() {
         return `${date.toLocaleString('default', { month: 'short' }).toUpperCase()} ${date.getDate() + 1} ${secondDate !== null && ` - ${secondDate.getDate()}`} ${date.getFullYear()}`;
     }
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    }
+
+    const afterOpenModal = () => {
+        const graphData = context.temperaturesByHour.map(t => {
+            return { date: new Date(t[0]), value: t[1]-1}
+        })
+        util.renderWeatherGraph(graphData);
+        console.log("Modal open trigger");
+    }
+    
+    const closeModal = () => {
+        setIsModalOpen(false);
+    }
+
     return (
         <React.Fragment>
             { context.loaded &&
@@ -81,13 +92,28 @@ function WeatherDisplay() {
                                     upperText={getDateFromTo()}
                                 />
                                 <div className="forecastTemperatureData">{renderForecastWeather()}</div>
-                                <div id="weatherGraph"></div>
+                                
+                                <button className="showGraphButton" onClick={openModal}>SHOW GRAPH</button>
+
+                                <ReactModal
+                                    isOpen={isModalOpen}
+                                    onAfterOpen={afterOpenModal}
+                                    onRequestClose={closeModal}
+                                    className="graphModal"
+                                    contentLabel="Example Modal"
+                                >
+                                    <button onClick={closeModal}>×</button>
+                                    <div className="modalTitle">
+                                        <span>Temperatures in next 5 days with 3 hour intervals</span>
+                                    </div>
+                                    <div id="weatherGraph"></div>
+                                </ReactModal>
                             </div>
                         :
                             <div className="NoCityFoundErrorMessage">
-                                <div>No City Found 😢</div>
+                                <div className="errorMessageTitle">No City Found 😳</div>
                                 <div>Please, try again.</div>
-                                <div>Make shure you got your spelling right!</div>
+                                <div className="errorMessageAdditionalInfo"> Make shure you got your spelling right and if desired city is located in choosen country!</div>
                             </div> 
                     }
                 </React.Fragment>

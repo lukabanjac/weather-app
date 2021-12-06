@@ -1,8 +1,11 @@
 import { useContext } from 'react';
+import ReactModal from 'react-modal';
 import './App.scss';
 import InputField from './components/InputField/InputField';
 import WeatherDisplay from './components/WeatherDisplay/WeatherDisplay';
 import Context from './state-mgmt/context';
+
+ReactModal.setAppElement('#root');
 
 function App() {
   

@@ -1,4 +1,5 @@
 @import '../../scss-imports/variables';
+@import '../../scss-imports/mixins';
 
 .inputField {
    background-color: $lighterGray;
@@ -7,6 +8,16 @@
    padding: 10px;
    display: flex;
    max-height: 51px;
+
+
+   @include mq('to', 600) {
+      position: sticky;
+   }
+
+   > img {
+      margin: auto;
+      margin-right: 10px;
+   }
 }
 
 .sunAndCloud {
@@ -22,7 +33,7 @@
 
    > button {
       font-weight: bold;
-      border-color: $midGray;
+      border-color: $lightGray;
       border-radius: 5px;
       background-color: $white;
       padding: 8px 10px 8px 5px;
@@ -38,21 +49,32 @@
 .cityInputWrapper {
    display: flex;
    position: relative;
+   border: none;
 
    background-color: $white;
 
    outline: none;
    margin-left: 10px;
-   
+
+   >
 
    .cityInputField {      
-      border-color: $midGray;
+      border-color: $lightGray;
       border-radius: 5px;
       border-style: solid;
       border-width: 1px;
       padding-right: 33px;
       padding-left: 10px;
       width: 100%;
+
+      &:focus {
+         border-color: $lightBlue;
+      }   
+
+      &:hover {
+         border-color: rgba($lightBlue, $alpha: 0.8);
+         box-shadow: 0px 0px 6px 1px rgba($lightBlue, $alpha: 0.8);
+      }
    }
 
    .citySearchButton {
@@ -60,11 +82,24 @@
       border-style: none;
       position: absolute;
       right: 0;
-      bottom: 7px;
+      bottom: 10px;
+      
+      > .loadingIcon {
+         height: 20px;
+         animation: rotation 1s infinite linear;
+      }
 
       &:hover {
          cursor: pointer;
       }
    }
-
 }
+
+@keyframes rotation {
+   from {
+     transform: rotate(0deg);
+   }
+   to {
+     transform: rotate(359deg);
+   }
+ }
